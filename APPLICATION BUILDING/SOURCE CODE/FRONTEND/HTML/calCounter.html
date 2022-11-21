@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie counter</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="{{ url_for('static', filename='js/script.js') }}" type="text/javascript"></script>
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/counterstyle.css') }}" rel="stylesheet">
+
+	<style>
+		body
+		{
+			background-image: url("https://www.livingproofnyc.com/wp-content/themes/livingproof/assets/img/hero-background.jpg");
+			background-size: cover;
+		}
+		.bar
+		{
+		margin: 0px;
+		padding:20px;
+		background-color:white;
+		opacity:0.6;
+		color:black;
+		font-family:'Roboto',sans-serif;
+		font-style: italic;
+		border-radius:20px;
+		font-size:25px;
+		}
+		h3
+		{
+		margin: 0px;
+		padding:20px;
+		background-color:#9ACD32;
+		/* width: 800px; */
+		opacity:0.6;
+		color:#000000;
+		font-family:'Roboto',sans-serif;
+		font-style: italic;
+		border-radius:20px;
+		font-size:25px;
+		}
+		a
+		{
+		color:grey;
+		float:right;
+		text-decoration:none;
+		font-style:normal;
+		padding-right:20px;
+		}
+		a:hover{
+		background-color:black;
+		color:white;
+		border-radius:15px;
+		font-size:30px;
+		padding-left:10px;
+		}
+		.div1{
+		  background-color: lightgrey;
+		  width: 500px;
+		  border: 10px solid peach;
+		  padding: 20px;
+		  margin: 20px;
+		  height: 500px;
+		}
+		
+		
+		
+		
+		
+		.header {	position: relative;
+					top:0;	
+					margin:0px;
+					z-index: 1;
+					left: 0px;
+					right: 0px;
+					position: fixed;
+					background-color: #8B008B ;
+					color: white;
+					box-shadow: 0px 8px 4px grey;
+					overflow: hidden;
+					padding-left:20px;
+					font-family: 'Josefin Sans';
+					font-size: 2vw;
+					width: 100%;
+					height:8%;
+					text-align: center;
+				}
+				.topnav {
+		  overflow: hidden;
+		  background-color: #FCAD98;
+		}
+		
+		.topnav-right a {
+		  float: left;
+		  color: black;
+		  text-align: center;
+		  padding: 14px 16px;
+		  text-decoration: none;
+		  font-size: 22px;
+		}
+		
+		.topnav-right a:hover {
+		  background-color: #FF69B4;
+		  color: black;
+		}
+		
+		.topnav-right a.active {
+		  background-color: #DA70D6;
+		  color: black;
+		}
+		
+		.topnav-right {
+		  float: right;
+		  padding-right:100px;
+		}
+		</style>
+
+</head>
+<body>
+
+	<div class="header">    
+		<div style="width:50%;float:left;font-size:2vw;text-align:left;color:black; padding-top:1%;padding-left:5%;">Nutrtion Image Analysis</div>
+		  <div class="topnav-right"style="padding-top:0.5%;">
+			
+			<a href="{{ url_for('home')}}">Home</a>
+			<a href="{{ url_for('image1')}}">Classify</a>
+			<a class="active" href="{{ url_for('calCounter')}}">calcounter</a>
+		  </div>
+		</div>
+		<br>
+
+    <main id="mainOne">
+	<div id="divPersonalInfo">
+		<h2 id="personalGreeting">HI!</h2>
+		<p>What are your daily nutritional requirements?</p>
+		<h3>Let's find out!</h3>
+		<form id="formPersonalInfo">
+			<table id="tablePersonalInfo">
+				<tr>
+					<td class="cellPI">Age:</td>
+					<td><input class="inputs" id="inputAge" type="number" name="age" min="18" max="150"></td>
+				</tr>
+				<tr>
+					<td class="cellPI">Sex:</td>
+					<td>
+						<select class="inputs" id="selectSex" onchange="showSelect()">
+							<option value=""></option>
+							<option value="female">female</option>
+							<option value="male">male</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="cellPI"><span id="pregnantLactating">PG/LAC:</span></td>
+					<td>
+						<select class="inputs" id="selectPregnantLactating"> 
+							<option value=""></option>
+							<option value="pregnant1">Pregnant (1st trimester)</option>
+							<option value="pregnant2">Pregnant (2nd trimester)</option>
+							<option value="pregnant3">Pregnant (3rd trimester)</option>
+							<option value="lactating1">Lactating (0-6 months postpartum)</option>
+							<option value="lactating2">Lactating (7-12 months postpartum)</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="cellPI">Height:</td>
+					<td><input class="inputs" id="inputHeight" type="number" name="height" min="100" max="250"> cm</td>
+				</tr>
+				<tr>
+					<td class="cellPI">Weight:</td>
+					<td><input class="inputs" id="inputWeight" type="number" name="weight" min="20" max="300"> kg</td>
+				</tr>
+				<tr>
+					<td class="cellPI">Lifestyle:</td>
+					<td>
+						<select class="inputs" id="selectLifestyle">
+							<option value=""></option>
+							<option value="sedentary">sedentary</option>
+							<option value="littleActive">somewhat active</option>
+							<option value="active">active</option>
+							<option value="veryActive">very active</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<button class="btns" id="btnCalculate" type="button" onclick="calculate()">Calculate</button>
+			<p id="messageFillIn2"></p>
+		</form>
+	</div>
+
+	<div id="divDailyRequirement">
+		<h2>DAILY NUTRITIONAL REQUIREMENTS</h2>
+		<table id="tableDailyRequirement">
+			<tr>
+				<td>Calories (kcal)</td>
+				<td id="reqCalories"></td>
+			</tr>
+			<tr>
+				<td>Total Carbohydrate (g)</td>
+				<td id="reqTotalCarbohydrate"></td>
+			</tr>
+			<tr>
+				<td>Linoleic Acid (g)</td>
+				<td id="reqLinoleicAcid"></td>
+			</tr>
+			<tr>
+				<td>Alpha-Linoleic Acid (g)</td>
+				<td id="reqAlphaLinoleicAcid"></td>
+			</tr>
+			<tr>
+				<td>Protein (g)</td>
+				<td id="reqProtein"></td>
+			</tr>
+			<tr>
+				<td>Dietary Fiber (g)</td>
+				<td id="reqDietaryFiber"></td>
+			</tr>
+			<tr>
+				<td class="tableHeaders">Vitamins</td>
+			</tr>
+			<tr>
+				<td>Vitamin A (&#181;g)</td>
+				<td id="reqVitA"></td>
+			</tr>
+			<tr>
+				<td>Vitamin D (&#181;g)</td>
+				<td id="reqVitD"></td>
+			</tr>
+			<tr>
+				<td>Vitamin E (mg)</td>
+				<td id="reqVitE"></td>
+			</tr>
+			<tr>
+				<td>Vitamin K (&#181;g)</td>
+				<td id="reqVitK"></td>
+			</tr>	
+			<tr>
+				<td>Vitamin C (mg)</td>
+				<td id="reqVitC"></td>
+			</tr>
+			<tr>
+				<td>Vitamin B1 (mg)</td>
+				<td id="reqVitB1"></td>
+			</tr>
+			<tr>
+				<td>Vitamin B2 (mg)</td>
+				<td id="reqVitB2"></td>
+			</tr>	
+			<tr>
+				<td>Vitamin B3 (mg)</td>
+				<td id="reqVitB3"></td>
+			</tr>
+			<tr>
+				<td>Vitamin B5 (mg)</td>
+				<td id="reqVitB5"></td>
+			</tr>
+			<tr>
+				<td>Vitamin B6 (mg)</td>
+				<td id="reqVitB6"></td>
+			</tr>
+			<tr>
+				<td>Vitamin B9 (&#181;g)</td>
+				<td id="reqVitB9"></td>
+			</tr>
+			<tr>
+				<td>Vitamin B12 (&#181;g)</td>
+				<td id="reqVitB12"></td>
+			</tr>
+			<tr>
+				<td class="tableHeaders">Minerals</td>
+			</tr>
+			<tr>
+				<td>Calcium (mg)</td>
+				<td id="reqCa"></td>
+			</tr>
+			<tr>
+				<td>Copper (&#181;g)</td>
+				<td id="reqCu"></td>
+			</tr>
+			<tr>
+				<td>Iron (mg)</td>
+				<td id="reqFe"></td>
+			</tr>
+			<tr>
+				<td>Magnesium (mg)</td>
+				<td id="reqMg"></td>
+			</tr>	
+			<tr>
+				<td>Manganese (mg)</td>
+				<td id="reqMn"></td>
+			</tr>
+			<tr>
+				<td>Phosphorus (mg)</td>
+				<td id="reqP"></td>
+			</tr>
+			<tr>
+				<td>Selenium (&#181;g)</td>
+				<td id="reqSe"></td>
+			</tr>	
+			<tr>
+				<td>Zinc (mg)</td>
+				<td id="reqZn"></td>
+			</tr>
+			<tr>
+				<td>Potassium (g)</td>
+				<td id="reqK"></td>
+			</tr>
+			<tr>
+				<td>Sodium (g)</td>
+				<td id="reqNa"></td>
+			</tr>
+		</table>
+		<button class="btns" id="btnNext" type="button" onclick="next()">Next</button>		
+	</div>
+
+	<div id="divQuestion">
+		<h2 id="personalQuestion">, WHAT HAVE YOU EATEN TODAY?</h2>
+		<p>Have you met your nutritional needs?</p>
+		<h3>Let's find out!</h3>
+		<button class="btns" id="btnCheckMyDay" type="button" onclick="checkMyDay()">Check</button>
+	</div>
+
+
+
+	<div id="divFoodSelection">
+		<h2>CHOOSE YOUR FOOD</h2>
+		<form id="formDailyFood">
+			<span class="minSpan">Grains:
+			<select class="inputsDF" id="selectGrains" onchange="addFood(this)">
+				<option value=""></option>
+				<option value="Oats, raw">Oats, raw</option>
+				<option value="Rice, raw">Rice, raw</option>
+				<option value="Quinoa, raw">Quinoa, raw</option>
+			</select>
+			</span>
+			<span class="minSpan">
+			Vegetables:
+			<select class="inputsDF" id="selectVegetables" onchange="addFood(this)">
+				<option value=""></option>
+				<option value="Broccoli, raw">Broccoli, raw</option>
+				<option value="Carrots, raw">Carrots, raw</option>
+				<option value="Potatos, raw, skin">Potatos, raw, skin</option>
+			</select>
+			</span>
+			<span class="minSpan">
+			Fruits:
+			<select class="inputsDF" id="selectFruits" onchange="addFood(this)">
+				<option value=""></option>
+				<option value="Apples, raw, with skin">Apples, raw, with skin</option>
+				<option value="Bananas, raw">Bananas, raw</option>
+				<option value="Oranges, raw, with peel">Oranges, raw, with peel</option>
+			</select>
+			</span>
+		</form>
+
+		<form id="formMyPlate">
+			<table id="tableMyPlate">
+				<tr>
+					<th class="tableHeadersNT pinkHeadline" id="tableHeaderArticals">Artical</th>
+					<th class="tableHeadersNT pinkHeadline" id="tableHeaderQuantity">Quantity</th>
+					<th class="tableHeadersNT" id="tableHeaderGrams"></th>
+					<th class="tableHeadersNT" id="tableHeaderDelete"></th>
+				</tr>
+			</table>
+			<br>
+			<p><small>Show me my daily nutritional profile</small></p>
+			<button class="btns" id="btnTracking" type="button" onclick="tracking()">Show me</button>
+			<p id="messageFillIn3"></p>
+		</form>
+	</div>
+
+	<div id="divNutritionTracker">
+		<h2>DAILY NUTRITIONAL PROFILE</h2>
+		<table id="tableNutritionTracker">
+			<tr>
+				<td class="cellWidth">Calories</td>
+				<td id="Calories" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Total Carbohydrate</td>
+				<td id="TotalCarbohydrate" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Linoleic Acid</td>
+				<td id="LinoleicAcid" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Alpha-Linoleic Acid</td>
+				<td id="AlphaLinoleicAcid" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Protein</td>
+				<td id="Protein" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Dietary Fiber</td>
+				<td id="DietaryFiber" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="tableHeaders">Vitamins</td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin A</td>
+				<td id="VitA" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin D</td>
+				<td id="VitD" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin E</td>
+				<td id="VitE" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin K</td>
+				<td id="VitK" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>	
+			<tr>
+				<td class="cellWidth">Vitamin C</td>
+				<td id="VitC" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin B1</td>
+				<td id="VitB1" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin B2</td>
+				<td id="VitB2" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>	
+			<tr>
+				<td class="cellWidth">Vitamin B3</td>
+				<td id="VitB3" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin B5</td>
+				<td id="VitB5" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin B6</td>
+				<td id="VitB6" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin B9</td>
+				<td id="VitB9" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Vitamin B12</td>
+				<td id="VitB12" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="tableHeaders">Minerals</td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Calcium</td>
+				<td id="Ca" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Copper</td>
+				<td id="Cu" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Iron</td>
+				<td id="Fe" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Magnesium</td>
+				<td id="Mg" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>	
+			<tr>
+				<td class="cellWidth">Manganese</td>
+				<td id="Mn" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Phosphorus</td>
+				<td id="P" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Selenium</td>
+				<td id="Se" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>	
+			<tr>
+				<td class="cellWidth">Zinc</td>
+				<td id="Zn" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Potassium</td>
+				<td id="K" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+			<tr>
+				<td class="cellWidth">Sodium</td>
+				<td id="Na" class="cellsProgressBar"><div class="divProgressBar"></div></td>
+			</tr>
+		</table>
+		<button class="btns" id="btnAddMore" type="button" onclick="addMoreFood()">Add More Food</button>
+	</div>
+</main>
+</body>
+</html>
